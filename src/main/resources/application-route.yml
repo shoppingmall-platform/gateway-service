@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: product-service
+            predicates:
+              - Path=/product/**
+            uri: http://product-service:8090
+            filters:
+              - RewritePath=/auth/(?<segment>.*), /$\{segment}
+
+          - id: member-service
+            predicates:
+              - Path=/member/**
+            uri: http://member-service:8091
+            filters:
+              - RewritePath=/auth/(?<segment>.*), /$\{segment}
