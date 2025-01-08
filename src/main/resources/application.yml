@@ -6,11 +6,10 @@ spring:
   application:
     name: gateway-service
   profiles:
-    include:
-      - route
     active: dev
 
 logging:
   level:
     org:
       springframework: DEBUG
+      reactor.netty.http.client: DEBUG

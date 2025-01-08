@@ -1,3 +1,31 @@
 jwt:
   secret:
     key: ${SECRET_KEY}
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          predicates:
+            - Path=/product/**
+          uri: http://product-service:8090
+          filters:
+            - RewritePath=/product/(?<segment>.*), /$\{segment}
+
+        - id: member-service
+          predicates:
+            - Path=/member/**
+          uri: http://member-service:8091
+          filters:
+            - RewritePath=/member/(?<segment>.*), /$\{segment}
+            - name: JwtAuthenticationFilter
+              args:
+                secretKey: ${jwt.secret.key}
+
+        - id: token-service
+          predicates:
+            - Path=/token/**
+          uri: http://token-service:8082
+          filters:
+            - RewritePath=/token/(?<segment>.*), /$\{segment}
