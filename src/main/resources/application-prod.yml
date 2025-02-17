@@ -12,7 +12,7 @@ spring:
       routes:
         - id: product-service
           predicates:
-            - Path=/product/**, /swagger-ui/**
+            - Path=/product/**, /swagger-ui/**, /docs-ui/**, /docs-api/**, /v3/**
           uri: http://product-service:8080
           filters:
             - RewritePath=/product/(?<segment>.*), /$\{segment}
