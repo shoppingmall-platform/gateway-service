@@ -1,3 +1,7 @@
+server:
+  shutdown: graceful
+  port: 8080
+
 jwt:
   secret:
     key: ${SECRET_KEY}
@@ -9,14 +13,14 @@ spring:
         - id: product-service
           predicates:
             - Path=/product/**
-          uri: http://product-service:8090
+          uri: http://product-service:8080
           filters:
             - RewritePath=/product/(?<segment>.*), /$\{segment}
 
-        - id: member-service
+        - id: product-service-with-authentication
           predicates:
             - Path=/member/**
-          uri: http://member-service:8091
+          uri: http://product-service:8080
           filters:
             - RewritePath=/member/(?<segment>.*), /$\{segment}
             - name: JwtAuthenticationFilter
@@ -26,6 +30,6 @@ spring:
         - id: token-service
           predicates:
             - Path=/token/**
-          uri: http://token-service:8082
+          uri: http://token-service:8080
           filters:
             - RewritePath=/token/(?<segment>.*), /$\{segment}
