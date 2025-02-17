@@ -16,7 +16,6 @@ spring:
           uri: http://product-service:8080
           filters:
             - RewritePath=/product/(?<segment>.*), /$\{segment}
-            - RewritePath=/swagger-ui/(?<segment>.*), /$\{segment}
 
         - id: product-service-with-authentication
           predicates:
