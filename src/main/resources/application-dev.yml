@@ -1,3 +1,35 @@
+server:
+  shutdown: graceful
+  port: 8081
+
 jwt:
   secret:
-    key: 1a27dbb9701ab63e0eb065105468650da17d58f28ca25aae61b5927260866868cda612b26af8f95feac91928c583144a62f15bba616df8679c2734b2577ekk67
+    key: -----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArYUG637BzBWrUNLb3MKPYnvFuqTp3/akNn2NALDxh0TUU5zlBxSJSjsDQuEqRfYdvmizOyzbKGNhLpM5cxuZFp8KTQvTQKF7aymoy4Z8sSzzKABSOqYfloSANV1j64uv4e3NSUxUcd0B/ermTKS2kq1RWLuEnVuPKAzRN9FfVZNTgMfGSWsRvzymL6bOeqa1/hqIyjr+euyFnHabMOj4FZSp90omM96mNMgvsnYK6lC/c/AgPeDSYaoOyzvRbu7t98+XvJt3SkVHohtMVHz/8RMzsuqwInp5JvV81xXYI+ju/KJTLsDv3f8mUCg9j/G3nFkHAB+mHLl/kyi71A5glwIDAQAB-----END PUBLIC KEY-----
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          predicates:
+            - Path=/product/**
+          uri: http://localhost:8090
+          filters:
+            - RewritePath=/product/(?<segment>.*), /$\{segment}
+
+        - id: product-service-with-authentication
+          predicates:
+            - Path=/member/**
+          uri: http://localhost:8090
+          filters:
+            - RewritePath=/member/(?<segment>.*), /$\{segment}
+            - name: JwtAuthenticationFilter
+              args:
+                secretKey: ${jwt.secret.key}
+
+        - id: token-service
+          predicates:
+            - Path=/token/**
+          uri: http://localhost:8082
+          filters:
+            - RewritePath=/token/(?<segment>.*), /$\{segment}

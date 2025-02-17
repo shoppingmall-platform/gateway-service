@@ -1,0 +1,19 @@
+POST localhost:8081/member/v1/members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.LwPWjcQHRjbKrHyzj0E7qwjoGMEOYLZA1bboRISbosznuuT2DU20aJnR-GLWZhNVe-hSPuy8dPsDyrBL7p05pdn1W8bGjgYu1KZcIO-xcbAUXvTPJKKsQ5ErNBHMMpry0Xs8GGV0GobVDKo3R1iRU6JLEoZx4S-ovw9Z0hVft-NV3L4yIPpqxXtsNTgVbPJ4jMBzj1Aqr4MP9nbg7zDbcQI9IhygATl5F4BxDtGbiAZImKVKKlKCVoPSoYInEOa7EII7HSLYnaGE9m4dpiDOF9PYMbzlpmwxNZgMvM5XboxlMwZmX66GnyIk2Gn4GUUea5y49WZvEyZmxqkftJrjgg
+
+{
+  "memberId": 0,
+  "name": "string",
+  "email": "string",
+  "password": "string",
+  "birthday": "2024-11-17",
+  "phoneNumber": "string",
+  "gender": "string",
+  "level": "string",
+  "region": "string",
+  "tosAgreement": true,
+  "privacyAgreement": true,
+  "marketingAgreement": true
+}
+
