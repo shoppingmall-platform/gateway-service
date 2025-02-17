@@ -24,10 +24,10 @@ WORKDIR /app
 COPY --from=build /app/build/libs/*SNAPSHOT.jar app.jar
 
 # 포트 8090 열기
-EXPOSE 8081
+EXPOSE 8080
 
 # 환경 변수를 런타임 이미지에 설정
-ENV SPRING_PROFILES_ACTIVE=dev
+ENV SPRING_PROFILES_ACTIVE=prod
 
 # 애플리케이션 실행
-CMD ["java", "-jar", "app.jar", "--spring.profiles.active=dev"]
+CMD ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
