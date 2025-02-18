@@ -12,11 +12,10 @@ spring:
       routes:
         - id: product-service
           predicates:
-            - Path=/product/**, /swagger-ui/**, /docs-ui/**, /docs-api/**, /v3/**
+            - Path=/product/**
           uri: http://product-service:8080
           filters:
             - RewritePath=/product/(?<segment>.*), /$\{segment}
-
         - id: product-service-with-authentication
           predicates:
             - Path=/member/**
@@ -26,11 +25,9 @@ spring:
             - name: JwtAuthenticationFilter
               args:
                 secretKey: ${jwt.secret.key}
-
         - id: token-service
           predicates:
             - Path=/token/**
           uri: http://token-service:8080
           filters:
-            - RewritePath=/token/(?<s
-
+            - RewritePath=/token/(?<segment>.*), /$\{segment}
