@@ -9,6 +9,13 @@ jwt:
 spring:
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':  # 🔹 모든 경로에서 CORS 허용
+            allowedOrigins: "http://localhost:3000" # 🚀 특정 Origin을 명시해야 allowCredentials 사용 가능
+            allowedMethods: "GET, POST, PUT, DELETE, OPTIONS"
+            allowedHeaders: "*"
+            allowCredentials: true  # 🚀 true이면 allowedOrigins에 * 대신 특정 도메인 설정해야 함
       routes:
         - id: product-service
           predicates:
