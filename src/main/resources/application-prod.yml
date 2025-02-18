@@ -12,10 +12,10 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':  # 🔹 모든 경로에서 CORS 허용
-            allowedOrigins: "http://localhost:3000" # 🚀 특정 Origin을 명시해야 allowCredentials 사용 가능
-            allowedMethods: "GET, POST, PUT, DELETE, OPTIONS"
-            allowedHeaders: "*"
-            allowCredentials: true  # 🚀 true이면 allowedOrigins에 * 대신 특정 도메인 설정해야 함
+            allowedOrigins: "*" # 모든 Origin 허용
+            allowedMethods: "*" # 모든 HTTP 메서드 허용 (GET, POST, PUT, DELETE, OPTIONS 등)
+            allowedHeaders: "*" # 모든 헤더 허용
+            allowCredentials: true # 자격 증명(쿠키, Authorization 헤더) 허용
       routes:
         - id: product-service
           predicates:
@@ -39,4 +39,5 @@ spring:
             - Path=/token/**
           uri: http://token-service:8080
           filters:
-            - RewritePath=/token/(?<segment>.*), /$\{segment}
+            - RewritePath=/token/(?<s
+
