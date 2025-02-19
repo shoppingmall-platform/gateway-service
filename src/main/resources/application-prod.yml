@@ -9,10 +9,16 @@ jwt:
 spring:
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':  # 🔹 모든 요청에 대해 CORS 허용
+            allowedOrigins: "*" # 🚀 모든 Origin 허용 (JWT 인증 없으므로 가능)
+            allowedMethods: "GET, POST, PUT, DELETE, OPTIONS" # 모든 HTTP 메서드 허용
+            allowedHeaders: "*" # 모든 헤더 허용
       routes:
         - id: product-service
           predicates:
-            - Path=/product/**, /swagger-ui/**, /docs-ui/**, /docs-api/**, /v3/**
+            - Path=/product/**
           uri: http://product-service:8080
           filters:
             - RewritePath=/product/(?<segment>.*), /$\{segment}
