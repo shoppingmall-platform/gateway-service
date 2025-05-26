@@ -10,17 +10,29 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: product-service
+        - id: product-service-public
           predicates:
             - Path=/product/**
-          uri: http://localhost:8090
+            - Method=GET
+          uri: http://localhost:8080
           filters:
-            - RewritePath=/product/(?<segment>.*), /$\{segment}
+            - RewritePath=/product/(?<segment>.*), /${segment}
+
+        - id: product-service-protected
+          predicates:
+            - Path=/product/**
+            - Method=POST
+          uri: http://localhost:8080
+          filters:
+            - RewritePath=/product/(?<segment>.*), /${segment}
+            - name: JwtAuthenticationFilter
+              args:
+                secretKey: ${jwt.secret.key}
 
         - id: product-service-with-authentication
           predicates:
             - Path=/member/**
-          uri: http://localhost:8090
+          uri: http://localhost:8080
           filters:
             - RewritePath=/member/(?<segment>.*), /$\{segment}
             - name: JwtAuthenticationFilter

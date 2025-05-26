@@ -9,8 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.List;
 
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
     @AllArgsConstructor
@@ -44,18 +47,20 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
         return (exchange, chain) -> {
             try {
-                List<String> auths = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
-                if (auths == null) {
+                List<HttpCookie> at = exchange.getRequest().getCookies().get("at");
+                if (at == null) {
                     return redirectToLogin(exchange);
                 }
-                String jwt = auths.get(0);
-                if (!jwt.startsWith("Bearer")) {
-                    throw new TokenException("잘못된 토큰 형식입니다.");
-                }
-
-                Claims claims = getJwtClaim(secretKey, jwt.substring(7));
+                String jwt = at.get(0).getValue();
+                Claims claims = getJwtClaim(secretKey, jwt);
+                log.debug("jwt is here : " + jwt);
+                log.debug("Header X-MEMBER-ID: " + claims.getSubject());
+                log.debug("Header ROLE: " + claims.get("role"));
                 ServerWebExchange modifiedExchange = exchange.mutate()
-                        .request(r -> r.header("X-MEMBER-ID", claims.getSubject()).build())
+                        .request(r -> r
+                                .header("X-MEMBER-ID", claims.getSubject())
+                                .header("ROLE", String.valueOf(claims.get("role"))).build()
+                        )
                         .build();
 
                 return chain.filter(modifiedExchange);
