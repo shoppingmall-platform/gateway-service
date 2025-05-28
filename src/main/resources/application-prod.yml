@@ -16,7 +16,7 @@ spring:
             - Method=GET
           uri: http://product-service:8080
           filters:
-            - RewritePath=/product/(?<segment>.*), /${segment}
+            - RewritePath=/public/(?<segment>.*), /${segment}
 
         - id: product-service-with-authentication
           predicates:
