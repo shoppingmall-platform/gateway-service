@@ -40,10 +40,11 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker image (multi-platform)
+      - name: Build and Push Docker image
         run: |
+          docker buildx create --use --name singlearch || docker buildx use singlearch
           docker buildx build \
-            --platform linux/amd64,linux/arm64 \
+            --platform linux/arm64 \
             -t $DOCKER_IMAGE \
             --push .
 

@@ -15,6 +15,7 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -53,9 +54,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 }
                 String jwt = at.get(0).getValue();
                 Claims claims = getJwtClaim(secretKey, jwt);
-                log.debug("jwt is here : " + jwt);
-                log.debug("Header X-MEMBER-ID: " + claims.getSubject());
-                log.debug("Header ROLE: " + claims.get("role"));
+
                 ServerWebExchange modifiedExchange = exchange.mutate()
                         .request(r -> r
                                 .header("X-MEMBER-ID", claims.getSubject())
@@ -66,6 +65,8 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 return chain.filter(modifiedExchange);
             } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
                 throw new TokenException("key가 잘못되었습니다");
+            } catch (ExpiredJwtException e) {
+                throw new TokenException("expired");
             }
         };
     }
