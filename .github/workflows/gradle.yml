@@ -67,8 +67,8 @@ jobs:
             git pull https://${{ secrets.GIT_ID }}:${{ secrets.GIT_PASSWORD }}@github.com/shoppingmall-platform/docker-compose.git main
             
             docker pull $DOCKER_IMAGE
-            docker compose pull token-service
-            docker compose up -d token-service
+            docker compose pull gateway-service
+            docker compose up -d gateway-service
   
   dependency-submission:
     runs-on: ubuntu-latest
