@@ -13,7 +13,6 @@ spring:
         - id: product-service-public
           predicates:
             - Path=/public/**, /swagger-ui/**, /docs-ui/**, /docs-api/**, /v3/**
-            - Method=GET
           uri: http://product-service:8080
           filters:
             - RewritePath=/public/(?<segment>.*), /${segment}
@@ -21,7 +20,6 @@ spring:
         - id: product-service-with-authentication
           predicates:
             - Path=/product/**
-            - Method=POST
           uri: http://product-service:8080
           filters:
             - RewritePath=/product/(?<segment>.*), /${segment}
