@@ -12,16 +12,14 @@ spring:
       routes:
         - id: product-service-public
           predicates:
-            - Path=/product/**, /swagger-ui/**, /docs-ui/**, /docs-api/**, /v3/**
-            - Method=GET
+            - Path=/public/**, /swagger-ui/**, /docs-ui/**, /docs-api/**, /v3/**
           uri: http://product-service:8080
           filters:
-            - RewritePath=/product/(?<segment>.*), /${segment}
+            - RewritePath=/public/(?<segment>.*), /${segment}
 
-        - id: product-service-protected
+        - id: product-service-with-authentication
           predicates:
             - Path=/product/**
-            - Method=POST
           uri: http://product-service:8080
           filters:
             - RewritePath=/product/(?<segment>.*), /${segment}
@@ -29,7 +27,7 @@ spring:
               args:
                 secretKey: ${jwt.secret.key}
 
-        - id: product-service-with-authentication
+        - id: member-service-with-authentication
           predicates:
             - Path=/member/**
           uri: http://product-service:8080
