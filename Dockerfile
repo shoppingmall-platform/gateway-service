@@ -1,5 +1,5 @@
 # 1단계: 빌드 단계 (Build stage)
-FROM openjdk:17-jdk-slim AS build
+FROM eclipse-temurin:17-jdk-jammy AS build
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN chmod +x /app/gradlew
 RUN ./gradlew clean build --no-daemon
 
 # 2단계: 실행 단계 (Runtime stage)
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
