@@ -1,0 +1,515 @@
+### 1. 카테고리 생성 (상품은 반드시 카테고리가 있어야 등록 가능)
+POST http://localhost:8081/product/v1/categories
+content-type:application/json
+Cookie: at=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJqbGUiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDg0MzM0NDcsImV4cCI6MTc0ODQzMzUwN30.iyWyyXJF7NbrMtUPHwdyHo-B5MTTXsY0rYKfGXGMsV0mirZhhMirw2YKTEtCu2u128kWZ9oT8dWjnzP0GCz-uqVtr2WOIa37fmYg0biKQs-Tni1R8al2Eoa8wtf6sL_WpakokiYrlbcawoBs5WFQ9Img5zc35Tatiu5YO5GaySiI-skza4pu4zxZ-2ujRD82woM5kLdsr-p4OABMUBF9K6h7Hmu-c6o-S9C4UC7aTt41Avx7MiJ6JhIRPjCeW7pL4IvMd6KSSADHR3C1vJqJR6pUwibHp7bMjd_nMswufzahGf9sZilioEoyGP7E91-3wUPPpftDSEqrplXknzSlpA
+
+{
+  "categoryName": "test1",
+  "categoryLevel": 1
+}
+
+### 1-1. 하위 카테고리 생성
+POST localhost:8080/v1/categories
+content-type:application/json
+Cookie: at=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJqbGUiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDg0MzA1MzIsImV4cCI6MTc0ODQzMDU5Mn0.sHBn0m8aQouBNxSAt3Yl7LwJhcqmD1sGfswQ0bW0fhYOWDoTrC6FgjAlpAf2pATMPn1AkX3vVVzsxi18ouFR36cKrp6UNPDx0oJSdDSWyqZOXdXZFRfcxR0dxplorNHd6JJNboQuIu8arK_PujdR2Vws7qcBfzvUHvv5i1Lo4IuG0q1jAmw2Bo6PP7Js-zJsPXal-T0XBPBPOvWrxFEiLc5Nsnnv6skmZzClTpHwETpsPCwmhitmfq3Jq4HC917ctHrIrnxoB1qMTTITU_2FxrG3EPl-MAAAUifQObPBEZ5Kd-SAPURGdgXlSuT3jIb7dbgE3cMo-I5k0dj7_odp6w
+
+{
+  "parentCategoryId": 1,
+  "categoryName": "child category1",
+  "categoryLevel": 2
+}
+
+### 1-2. 카테고리 전체 조회
+GET localhost:8080/v1/categories
+Cookie: at=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJqbGUiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDg0MzA1MzIsImV4cCI6MTc0ODQzMDU5Mn0.sHBn0m8aQouBNxSAt3Yl7LwJhcqmD1sGfswQ0bW0fhYOWDoTrC6FgjAlpAf2pATMPn1AkX3vVVzsxi18ouFR36cKrp6UNPDx0oJSdDSWyqZOXdXZFRfcxR0dxplorNHd6JJNboQuIu8arK_PujdR2Vws7qcBfzvUHvv5i1Lo4IuG0q1jAmw2Bo6PP7Js-zJsPXal-T0XBPBPOvWrxFEiLc5Nsnnv6skmZzClTpHwETpsPCwmhitmfq3Jq4HC917ctHrIrnxoB1qMTTITU_2FxrG3EPl-MAAAUifQObPBEZ5Kd-SAPURGdgXlSuT3jIb7dbgE3cMo-I5k0dj7_odp6w
+
+
+### 2. 제품 등록 ({옵션-상품옵션 테이블 자동등록}, {태그-기존태그 존재시 only 상품태그 저장, 기존태그 부재시 태그 테이블 & 상품 태그 테이블 저장}, {썸네일-자동 등록})
+POST http://localhost:8080/v1/products
+Content-Type: application/json
+X-MEMBER-ID: test
+ROLE: ADMIN
+
+{
+  "name": "Product Name1",
+  "description": "description.",
+  "categoryId": 3,
+  "price": 15000,
+  "summaryDescription": "summary description.",
+  "simpleDescription": "simple description.",
+  "productOptions": [
+    {
+      "productOptionName": "PON",
+      "productOptionDetails": [
+        {
+          "productOptionType": "POT",
+          "productOptionDetailName": "OPDN"
+        }
+      ],
+      "stockQuantity": 10,
+      "additionalPrice": 3333
+    }
+  ],
+  "thumbnail": "/thm/path",
+  "productImages": {
+    "paths": [
+      "/path/1",
+      "/path/2",
+      "/path/3"
+    ]
+  },
+  "tags": [
+    {
+      "tagName": "진짜 멋진거"
+    }
+  ]
+}
+
+### 1-3. 제품-카테고리 매핑 테이블 전체 조회
+GET localhost:8080/v1/product-category
+ROLE:ADMIN
+
+### 3. 할인 저장
+POST localhost:8080/v1/discounts
+content-type: application/json
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+{
+  "discountName": "test discount 1",
+  "discountType": "할인율",
+  "discountValue": 20,
+  "discountStartDate": "2025-02-22T00:00:00.000Z",
+  "discountEndDate": "2025-02-23T00:00:00.000Z",
+  "applyType": 2,
+  "ids": [3]
+}
+
+### 4. 할인 조회
+GET localhost:8080/v1/discounts
+
+
+### 5. (할인 포함) 제품 등록
+POST http://localhost:8080/v1/products
+Content-Type: application/json
+X-MEMBER-ID: test
+ROLE: ADMIN
+
+{
+  "name": "Product Name2",
+  "description": "description.",
+  "categoryId": 1,
+  "price": 139900,
+  "discountId": 1,
+  "summaryDescription": "할인 포함된 제품입니다.",
+  "simpleDescription": "할인 포함",
+  "productOptions": [
+    {
+      "productOptionName": "black/L",
+      "productOptionDetails": [
+        {
+          "productOptionType": "color",
+          "productOptionDetailName": "black"
+        },
+        {
+          "productOptionType": "size",
+          "productOptionDetailName": "L"
+        }
+      ],
+      "stockQuantity": 10,
+      "additionalPrice": 0
+    },
+    {
+      "productOptionName": "black/M",
+      "productOptionDetails": [
+        {
+          "productOptionType": "color",
+          "productOptionDetailName": "black"
+        },
+        {
+          "productOptionType": "size",
+          "productOptionDetailName": "M"
+        }
+      ],
+      "stockQuantity": 10,
+      "additionalPrice": 0
+    },
+    {
+      "productOptionName": "white/L",
+      "productOptionDetails": [
+        {
+          "productOptionType": "color",
+          "productOptionDetailName": "white"
+        },
+        {
+          "productOptionType": "size",
+          "productOptionDetailName": "L"
+        }
+      ],
+      "stockQuantity": 10,
+      "additionalPrice": 1000
+    }
+  ],
+  "thumbnail": "/thm/path",
+  "productImages": {
+    "paths": [
+      "/path/1",
+      "/path/2",
+      "/path/3"
+    ]
+  },
+  "tags": [
+    {
+      "tagName": "진짜 멋진거"
+    },
+    {
+      "tagName": "진짜 chill한거"
+    }
+  ]
+}
+
+
+### 6. 관리자용 전체 제품 조회 (페이지네이션)
+POST http://localhost:8080/v1/products/read?page=0&size=3
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+
+### 6-1. 관리자용 제품 검색 (페이지네이션)
+POST http://localhost:8080/v1/products/read
+Content-Type: application/json
+ROLE: ADMIN
+
+{
+  "categoryId": 3
+}
+
+### 7. 사용자용 카테고리별 제품 조회 (페이지네이션) 사용자용 api는 반드시 카테고리 아이디가 pathVariable로 들어가야함
+POST http://localhost:8080/v1/0/products?page=0&size=3
+Content-Type: application/json
+X-MEMBER-ID: asdf
+
+
+
+### 7-1. 단일 제품 조회
+GET localhost:8080/v1/products/2
+X-MEMBER-ID: asdf
+
+
+### 7-2. 사용자용 제품 검색 (페이지네이션)
+POST http://localhost:8080/v1/0/products
+Content-Type: application/json
+#
+#{
+#  "minimumPrice": 1000,
+#  "maximumPrice": 16000
+#}
+
+
+
+### 7-2. 제품 수정
+POST localhost:8080/v1/products/update-product
+content-type: application/json
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+{
+  "id": 1,
+  "name": "updated product1",
+  "description": "product 1 description",
+  "categoryId": 1,
+  "productState": "NEW",
+  "createdAt": "2025-02-12T11:17:32.355Z",
+  "price": 1000,
+  "discountId": 1,
+  "summaryDescription": "string",
+  "simpleDescription": "string",
+  "isDeleted": false,
+  "isSelling": true,
+  "productImagePaths": {
+    "paths": [
+      "asdf",
+      "qwer"
+    ]
+  }
+}
+
+
+### 8-1. 옵션 생성1
+POST localhost:8080/v1/options
+content-type: application/json
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+{
+  "optionTypeName": "size",
+  "optionValues": [
+    {
+      "optionValueName": "XL"
+    },
+    {
+      "optionValueName": "L"
+    },
+    {
+      "optionValueName": "S"
+    }
+  ]
+}
+
+
+### 8-2. 옵션 생성2
+POST localhost:8080/v1/options
+content-type: application/json
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+{
+  "optionTypeName": "color",
+  "optionValues": [
+    {
+      "optionValueName": "black"
+    },
+    {
+      "optionValueName": "white"
+    }
+  ]
+}
+
+
+### 9. 전체 옵션 조회 (옵션 테이블에 저장된 것만 조회 가능, 상품 등록하면서 자동 저장된 옵션은 조회 x)
+GET localhost:8080/v1/options?page=0&size=3
+content-type: application/json
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+
+### 10. 옵션 삭제
+POST localhost:8080/v1/options/delete-option
+content-type: application/json
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+{
+  "optionTypeId": 1
+}
+
+
+### 제품 생성
+POST localhost:8080/v1/product
+content-type: application/json
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+{
+  "name": "product1",
+  "description": "product 1 description",
+  "categoryId": 1,
+  "productState": "NEW",
+  "price": 1000,
+  "discountId": 2,
+  "summaryDescription": "abc",
+  "simpleDescription": "abc",
+  "isSelling": true,
+  "productOptions": [
+    {
+      "productOptionName": "black/L",
+      "productOptionDetails": [
+        {
+          "productOptionType": "color",
+          "productOptionDetailName": "black"
+        },
+        {
+          "productOptionType": "size",
+          "productOptionDetailName": "L"
+        }
+      ],
+      "stockQuantity": 10,
+      "additionalPrice": 0
+    },
+    {
+      "productOptionName": "black/M",
+      "productOptionDetails": [
+        {
+          "productOptionType": "color",
+          "productOptionDetailName": "black"
+        },
+        {
+          "productOptionType": "size",
+          "productOptionDetailName": "M"
+        }
+      ],
+      "stockQuantity": 10,
+      "additionalPrice": 0
+    },
+    {
+      "productOptionName": "white/L",
+      "productOptionDetails": [
+        {
+          "productOptionType": "color",
+          "productOptionDetailName": "white"
+        },
+        {
+          "productOptionType": "size",
+          "productOptionDetailName": "L"
+        }
+      ],
+      "stockQuantity": 10,
+      "additionalPrice": 1000
+    }
+  ]
+}
+
+### 제품 생성 with only 1 option
+POST localhost:8080/v1/product
+content-type: application/json
+X-MEMBER-ID: asdf
+ROLE: ADMIN
+
+{
+  "name": "hat",
+  "description": "cap description",
+  "categoryId": 1,
+  "productState": "NEW",
+  "createdAt": "2025-02-12T11:17:32.355Z",
+  "price": 1000,
+  "discountId": 2,
+  "summaryDescription": "no cap",
+  "simpleDescription": "abc",
+  "isDeleted": false,
+  "isSelling": true,
+  "productOptions": [
+    {
+      "productOptionName": "Free",
+      "productOptionDetails": [
+        {
+          "productOptionType": "style",
+          "productOptionDetailName": "1"
+        }
+      ],
+      "stockQuantity": 10,
+      "additionalPrice": 0
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+### GET category list
+GET http://152.67.211.72:18080/product/v1/categories
+
+### POST category
+POST http://localhost:8080/v1/categories
+Content-Type: application/json
+
+{
+  "categoryName": "test1",
+  "categoryLevel": 1
+}
+
+### POST category
+POST http://localhost:8090/v1/categories
+Content-Type: application/json
+
+{
+  "categoryName": "test2",
+  "categoryLevel": 2
+}
+
+### POST category
+POST http://localhost:8090/v1/categories
+Content-Type: application/json
+
+{
+  "categoryName": "test3",
+  "categoryLevel": 3
+}
+
+### GET category
+GET http://localhost:8090/v1/categories/1
+
+### POST category with parent
+POST http://localhost:8090/v1/categories
+Content-Type: application/json
+
+{
+  "parentCategoryId": 2,
+  "categoryName": "test4",
+  "categoryLevel": 3
+}
+
+### POST category(부모 id 에러 테스트)
+POST http://localhost:8090/v1/categories
+Content-Type: application/json
+
+{
+  "parentCategoryId": 1000,
+  "categoryName": "test5",
+  "categoryLevel": 2
+}
+
+### POST category(레벨 범위 벗어나는 요청 테스트)
+POST http://localhost:8090/v1/categories
+Content-Type: application/json
+
+{
+  "categoryName": "test6",
+  "categoryLevel": 4
+}
+
+### GET category
+GET http://localhost:8090/v1/categories/4
+
+### GET category (존재하지 않는 id 조회 테스트)
+GET http://localhost:8090/v1/categories/444
+
+### UPDATE category
+POST http://localhost:8090/v1/categories/update-category
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "categoryName": "update1"
+}
+
+### UPDATE category name 에러 테스트
+POST http://localhost:8090/v1/categories/update-category
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "categoryName": ""
+}
+
+### UPDATE category
+POST http://localhost:8090/v1/categories/update-category
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "categoryLevel": 3
+}
+
+### UPDATE category level 에러 테스트
+POST http://localhost:8090/v1/categories/update-category
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "categoryLevel": 4
+}
+
+### DELETE category
+POST http://localhost:8090/v1/categories/delete-category
+Content-Type: application/json
+
+{
+  "categoryId": 4
+}
