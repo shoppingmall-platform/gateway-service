@@ -77,3 +77,10 @@ spring:
           uri: http://token-service:8080
           filters:
             - RewritePath=/token/(?<segment>.*), /$\{segment}
+
+logging:
+  level:
+    org:
+      springframework: WARN
+      reactor.netty.http.client: WARN
+      springframework.cloud.gateway: WARN
