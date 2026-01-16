@@ -48,6 +48,26 @@ spring:
               args:
                 secretKey: ${jwt.secret.key}
 
+        - id: order-service-with-authentication
+          predicates:
+            - Path=/order/**
+          uri: http://localhost:8080
+          filters:
+            - RewritePath=/order/(?<segment>.*), /$\{segment}
+            - name: JwtAuthenticationFilter
+              args:
+                secretKey: ${jwt.secret.key}
+
+        - id: payment-service-with-authentication
+          predicates:
+            - Path=/payment/**
+          uri: http://localhost:8080
+          filters:
+            - RewritePath=/payment/(?<segment>.*), /$\{segment}
+            - name: JwtAuthenticationFilter
+              args:
+                secretKey: ${jwt.secret.key}
+
         - id: token-service
           predicates:
             - Path=/token/**

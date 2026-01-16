@@ -9,3 +9,4 @@ logging:
     org:
       springframework: DEBUG
       reactor.netty.http.client: DEBUG
+      springframework.cloud.gateway: DEBUG

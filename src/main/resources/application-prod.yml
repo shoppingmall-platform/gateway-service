@@ -51,9 +51,36 @@ spring:
               args:
                 secretKey: ${jwt.secret.key}
 
+        - id: order-service-with-authentication
+          predicates:
+            - Path=/order/**
+          uri: http://product-service:8080
+          filters:
+            - RewritePath=/order/(?<segment>.*), /$\{segment}
+            - name: JwtAuthenticationFilter
+              args:
+                secretKey: ${jwt.secret.key}
+
+        - id: payment-service-with-authentication
+          predicates:
+            - Path=/payment/**
+          uri: http://product-service:8080
+          filters:
+            - RewritePath=/payment/(?<segment>.*), /$\{segment}
+            - name: JwtAuthenticationFilter
+              args:
+                secretKey: ${jwt.secret.key}
+
         - id: token-service
           predicates:
             - Path=/token/**
           uri: http://token-service:8080
           filters:
             - RewritePath=/token/(?<segment>.*), /$\{segment}
+
+logging:
+  level:
+    org:
+      springframework: WARN
+      reactor.netty.http.client: WARN
+      springframework.cloud.gateway: WARN
