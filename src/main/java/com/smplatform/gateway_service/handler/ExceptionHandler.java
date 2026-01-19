@@ -35,7 +35,7 @@ public class ExceptionHandler implements ErrorWebExceptionHandler {
         } else {
             response.setStatusCode(HttpStatus.NOT_FOUND);
         }
-        log.error("에러 메시지 : {}",ex.getMessage());
+        log.error("에러 메시지 : {}",ex.getMessage(), ex);
 
         return response.writeWith(
                 Mono.just(response
