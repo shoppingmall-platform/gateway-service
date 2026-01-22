@@ -3,7 +3,6 @@ package com.smplatform.gateway_service.filter;
 import com.smplatform.gateway_service.exception.TokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,9 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpCookie;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -54,6 +51,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 }
                 String jwt = at.get(0).getValue();
                 Claims claims = getJwtClaim(secretKey, jwt);
+                log.info("X-MEMBER-ID={}, ROLE={}", claims.getSubject(), claims.get("role"));
 
                 ServerWebExchange modifiedExchange = exchange.mutate()
                         .request(r -> r

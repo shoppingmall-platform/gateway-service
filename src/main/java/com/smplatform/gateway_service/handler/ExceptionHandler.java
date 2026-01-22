@@ -35,7 +35,11 @@ public class ExceptionHandler implements ErrorWebExceptionHandler {
         } else {
             response.setStatusCode(HttpStatus.NOT_FOUND);
         }
-        log.error("에러 메시지 : {}",ex.getMessage(), ex);
+        if (ex instanceof TokenException && "expired".equals(ex.getMessage())) {
+            log.warn("에러 메시지 : {}", ex.getMessage());
+        } else {
+            log.error("에러 메시지 : {}", ex.getMessage(), ex);
+        }
 
         return response.writeWith(
                 Mono.just(response
